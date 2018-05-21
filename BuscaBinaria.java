@@ -15,7 +15,7 @@ import java.util.Scanner;
  */
 public class BuscaBinaria {
 
-    private static int iteracoes = 0;
+    private static int iteracao = 0;
     private static int meio = 0;
 
     /**
@@ -37,6 +37,7 @@ public class BuscaBinaria {
      * @param vetor: referencia para o vetor instanciado na main.
      */
     private static void ordenarVetor(int[] vetor) {
+        System.out.println("Ordenando o Vetor:");
         Arrays.sort(vetor);
     }
 
@@ -61,21 +62,21 @@ public class BuscaBinaria {
     private static int buscaNaoRecursiva(int[] vet, int valor) {
         int inicio = 0;
         int fim = vet.length - 1;
-        iteracoes++;
         meio = 0;
 
         while (inicio <= fim) {
-            iteracoes++;
+            iteracao++;
             meio = (inicio + fim) / 2;
             if (valor < vet[meio]) {
                 fim = meio - 1;
             } else if (valor > vet[meio]) {
                 inicio = meio + 1;
             } else {
-                return iteracoes;
+                return meio;
             }
         }
-        return iteracoes;
+        iteracao++;
+        return -1;
     }
 
     /**
@@ -87,13 +88,13 @@ public class BuscaBinaria {
      * @return retorna o numero de Iterações.
      */
     private static int buscaRecursiva(int[] vet, int inicio, int fim, int valor) {
-        iteracoes++;
+        iteracao++;
         meio = (inicio + fim) / 2;
 
         if (inicio > fim) {
-            return iteracoes;
+            return -1;
         } else if (valor == vet[meio]) {
-            return iteracoes;
+            return meio;
         } else if (valor < vet[meio]) {
             return buscaRecursiva(vet, inicio, meio - 1, valor);
         } else {
@@ -111,15 +112,29 @@ public class BuscaBinaria {
 
         preencherVetor(vetor, input);
         ordenarVetor(vetor);
-        ordenarVetor(vetor);
+        exibirVetor(vetor);
 
-        iteracoes = 0;
-        int naoRecursiva = buscaNaoRecursiva(vetor, 10);
-        iteracoes = 0;
-        int recursiva = buscaRecursiva(vetor, 0, vetor.length - 1, 10);
+        System.out.println("\nInforme o valor que deseja procurar no vetor: ");
+        int valor = input.nextInt();
 
-        System.out.println("\nNº de Iterações na busca não recursiva: " + naoRecursiva);
-        System.out.println("Nº de Iterações na busca recursiva: " + recursiva);
+        iteracao = 0;
+        System.out.println("[Busca não Recursiva]");
+        if (buscaNaoRecursiva(vetor, valor) != -1) {
+            System.out.println("Elemento procurado: " + valor 
+                    + "\nPosição: " + buscaNaoRecursiva(vetor, valor) 
+                    + "\nNº de Iterações: " + iteracao);
+        } else {
+            System.out.println("Valor não encontrado\nNº de Iterações: " + iteracao);
+        }
 
+        iteracao = 0;
+        System.out.println("\n[Busca Recursiva]");
+        if (buscaRecursiva(vetor, 0, vetor.length - 1, valor) != -1) {
+            System.out.println("Elemento procurado: " + valor 
+                    + "\nPosição: " + buscaRecursiva(vetor, 0, vetor.length - 1, valor) 
+                    + "\nNº de Iterações: " + iteracao);
+        } else {
+            System.out.println("Valor não encontrado\nNº de Iterações: " + iteracao);
+        }
     }
 }
